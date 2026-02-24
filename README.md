@@ -160,6 +160,8 @@ http://18.189.30.196/tutorials
 ## 📸 Screenshots
 
 The repository includes screenshots of:
+- AWS EC2 instance
+![AWS EC2 instance screenshot](Screenshot%202026-02-24%20170626.png)
 - Jenkins pipeline execution
 ![Jenkins pipeline execution screenshot](./Screenshot%202026-02-24%20164248.png)
 - Running containers
@@ -201,7 +203,6 @@ DevOps & Cloud Enthusiast
 
 - GitHub: https://github.com/am-yash  
 - Docker Hub: https://hub.docker.com/u/yashdockerio  
-- LinkedIn: https://www.linkedin.com/in/yash-vishwakarma-devops/
 
 ---
 
