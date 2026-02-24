@@ -152,7 +152,7 @@ docker-compose up -d
 
 ### 4️⃣ Access Application
 ```
-http://<EC2_PUBLIC_IP>/
+http://18.189.30.196/tutorials
 ```
 
 ---
@@ -161,9 +161,11 @@ http://<EC2_PUBLIC_IP>/
 
 The repository includes screenshots of:
 - Jenkins pipeline execution
-- Docker image build and push
+![Jenkins pipeline execution screenshot](./Screenshot%202026-02-24%20164248.png)
 - Running containers
+![Alt text](./Screenshot%202026-02-24%20164420.png)
 - Application UI
+![Application UI](./Screenshot%202026-02-24%20164302.png)
 
 ---
 
