@@ -1,0 +1,93 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKERHUB_USERNAME = 'yashdockerio'
+        BACKEND_IMAGE = 'mean-backend'
+        FRONTEND_IMAGE = 'mean-frontend'
+        DOCKERHUB_CREDS = 'dockerhub-creds'
+    }
+
+    stages {
+
+        stage('Checkout Code') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/am-yash/crud-dd-task-mean-app.git'
+            }
+        }
+
+        stage('Verify Structure') {
+            steps {
+                sh '''
+                echo "Workspace root:"
+                pwd
+                ls
+
+                echo "Inside project folder:"
+                cd crud-dd-task-mean-app
+                pwd
+                ls
+                '''
+            }
+        }
+
+        stage('Build Backend Image') {
+            steps {
+                dir('crud-dd-task-mean-app/backend') {
+                    sh 'docker build -t $DOCKERHUB_USERNAME/$BACKEND_IMAGE:latest .'
+                }
+            }
+        }
+
+        stage('Build Frontend Image') {
+            steps {
+                dir('crud-dd-task-mean-app/frontend') {
+                    sh 'docker build -t $DOCKERHUB_USERNAME/$FRONTEND_IMAGE:latest .'
+                }
+            }
+        }
+
+        stage('Docker Login') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub-creds',
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
+                )]) {
+                    sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
+                }
+            }
+        }
+
+        stage('Push Images') {
+            steps {
+                sh '''
+                docker push $DOCKERHUB_USERNAME/$BACKEND_IMAGE:latest
+                docker push $DOCKERHUB_USERNAME/$FRONTEND_IMAGE:latest
+                '''
+            }
+        }
+
+        stage('Deploy with Docker Compose') {
+            steps {
+                dir('crud-dd-task-mean-app') {
+                    sh '''
+                    docker-compose down
+                    docker-compose pull
+                    docker-compose up -d
+                    '''
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ CI/CD Pipeline executed successfully!'
+        }
+        failure {
+            echo '❌ CI/CD Pipeline failed!'
+        }
+    }
+}
